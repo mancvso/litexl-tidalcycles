@@ -1,0 +1,3 @@
+b1 $ density 2 $ s "<[bd ~ [bd ~ bd [bd bd]] ~], bd(4, 8)>" # gain 1
+
+b2 $ density 0.25 $ stack [kkick, "bd:2(6, 8, 2)"] # freq 128 # room 0.25

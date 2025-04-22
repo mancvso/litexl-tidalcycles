@@ -8,9 +8,12 @@ local keymap = require "core.keymap"
 local repl = require "plugins.tidal.repl"
 
 local function eval(str)
-  core.log("OK")
-  repl:initTidal()
-  return repl:tidalSendExpression("hush")
+  core.log(str)
+  if repl:isStarted() ~= true then
+    repl:initTidal()
+    repl:setup()
+  end
+  return repl:tidalSendExpression(str)
 end
 
 command.add("core.docview", {
@@ -29,10 +32,13 @@ command.add("core.docview", {
     for idx, line1, col1, line2, col2 in dv.doc:get_selections() do
       if line1 ~= line2 or col1 ~= col2 then
         local text = dv.doc:get_text(line1, col1, line2, col2)
-        dv.doc:text_input(eval(text), idx)
+        --dv.doc:text_input(
+        eval(text)
+        --, idx)
       else
         local text = dv.doc.lines[line1]
-        dv.doc:replace_cursor(idx, line1, 0, line1, #text, eval)
+        eval(text)
+        --dv.doc:replace_cursor(idx, line1, 0, line1, 1, eval(text) )
       end
     end
   end,

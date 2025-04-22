@@ -5,6 +5,7 @@ function repl:initTidal()
     -- load boot.tidal
     --  script path/content
     self.managed_ghc:start()
+    self.managed_ghc:writeLine(":script /home/endo/test-script.hs")
     return true
 end
 
@@ -21,7 +22,7 @@ function repl:tidalSendExpression(expression)
     self:tidalSendLine(":{")
 
     for line in repl.magiclines(expression) do
-        print( line=="" and "(blank)" or line)
+        -- print( line )
         self:tidalSendLine(line)
     end
 
@@ -29,11 +30,15 @@ function repl:tidalSendExpression(expression)
 end
 
 function repl:tidalSendLine(line)
-	return self.managed_ghc.writeLine(line)
+    if self.managed_ghc:isStarted() == true then
+        return self.managed_ghc:writeLine(line)
+    else
+        print("not started")
+    end
 end
 
 function repl:isStarted()
-    return self.managed_ghc ~= nil
+    return self.managed_ghc:isStarted()
 end
 
 return repl
